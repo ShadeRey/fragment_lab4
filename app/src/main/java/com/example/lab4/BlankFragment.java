@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class BlankFragment extends Fragment {
 
     ListView songsList;
-    ArrayList<Songs> songs = new ArrayList<Songs>();
+    static ArrayList<Songs> songs = new ArrayList<Songs>();
     public BlankFragment() {
         // Required empty public constructor
     }
@@ -45,20 +45,38 @@ public class BlankFragment extends Fragment {
         songs.add(new Songs("デーモン", "木曜日", R.drawable.d));
     }
 
+    private SongAdapter songAdapter;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setInitialData();
         songsList = view.findViewById(R.id.songsongList);
-        SongAdapter songAdapter = new SongAdapter(getContext(), R.layout.list_item, songs);
-        songsList.setAdapter(songAdapter);
-        AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                Songs selectedSong = (Songs) parent.getItemAtPosition(position);
-                Toast.makeText(getContext(), "Был выбран пункт " + selectedSong.getName(), Toast.LENGTH_SHORT).show();
-            }
-        };
-        songsList.setOnItemClickListener(itemListener);
+        songAdapter = new SongAdapter(getContext(), R.layout.list_item, songs);
+        songAdapter.setOnLongItemClickListener((view1, item, position) -> {
+            deleteDialog(position);
+
+            //songs.remove(position);
+            //songAdapter.notifyDataSetChanged();
+            return true;
+        });
+        songsList.setAdapter(songAdapter);;
+        //songsList.setOnItemLongClickListener();
+        initButton(view);
+    }
+
+    private void initButton(View view) {
+        Button btn = view.findViewById(R.id.btn_add);
+        btn.setOnClickListener(this::showDialog);
+    }
+
+    public void showDialog(View v){
+        if (songAdapter == null) return;
+        CustomDialogFragment dialog = new CustomDialogFragment(songAdapter);
+        dialog.show(requireActivity().getSupportFragmentManager(), "custom");
+    }
+
+    public void deleteDialog(int position){
+        DeleteDialogFragment deleteDialogg = new DeleteDialogFragment(songAdapter, position);
+        deleteDialogg.show(requireActivity().getSupportFragmentManager(), "delete");
     }
 }
