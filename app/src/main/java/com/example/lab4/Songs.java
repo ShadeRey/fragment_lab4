@@ -1,8 +1,8 @@
 package com.example.lab4;
 
 public class Songs {
-    private String name;
-    private String author;
+    public static String name;
+    public static String author;
     private int animeResource;
 
     public Songs(String name, String author, int anime){

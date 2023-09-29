@@ -5,20 +5,32 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 
 public class BlankFragment extends Fragment {
 
+    public static BlankFragment newInstance(String Name, String Author){
+        BlankFragment blankFragment = new BlankFragment();
+        Name = Songs.name;
+        Author = Songs.author;
+        Bundle args = new Bundle();
+        args.putString("SongName", Name);
+        args.putString("SongsAuthor", Author);
+        blankFragment.setArguments(args);
+        return blankFragment;
+    }
     ListView songsList;
+
+
     static ArrayList<Songs> songs = new ArrayList<Songs>();
     public BlankFragment() {
         // Required empty public constructor
@@ -60,13 +72,32 @@ public class BlankFragment extends Fragment {
             return true;
         });
         songsList.setAdapter(songAdapter);;
+        songsList.
         //songsList.setOnItemLongClickListener();
         initButton(view);
+        nextFrag(view);
     }
 
     private void initButton(View view) {
         Button btn = view.findViewById(R.id.btn_add);
         btn.setOnClickListener(this::showDialog);
+    }
+
+
+
+    private void nextFrag(View view){
+        Button nxt_frg = view.findViewById(R.id.btn_nextFragment);
+        nxt_frg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment frag = InfoFragment.newInstance();
+                FragmentTransaction ft = requireActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.main_fragment, frag);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.addToBackStack(null);
+                ft.commit();
+            }
+        });
     }
 
     public void showDialog(View v){
