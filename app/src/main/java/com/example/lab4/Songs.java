@@ -1,14 +1,22 @@
 package com.example.lab4;
 
 public class Songs {
-    public static String name;
-    public static String author;
+    public String name;
+    public String author;
     private int animeResource;
+    private String description;
 
+    public Songs(String name, String author, int anime, String description){
+        this.name=name;
+        this.author=author;
+        this.animeResource=anime;
+        this.description=description;
+    }
     public Songs(String name, String author, int anime){
         this.name=name;
         this.author=author;
         this.animeResource=anime;
+        this.description="";
     }
 
     public String getName(){
@@ -29,4 +37,6 @@ public class Songs {
     public void setAnimeResource(int animeResource){
         this.animeResource=animeResource;
     }
+    public String getDescription(){return this.description;}
+    public void setDescription(String description){this.description=description;}
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,10 +17,15 @@ public class SongAdapter extends ArrayAdapter<Songs> {
     private LayoutInflater inflater;
     private int layout;
     public static List<Songs> songs;
-    private OnLongClickListener listener;
+    private OnItemClickListener itemClickListener;
+    private OnLongClickListener longClickListener;
 
     public interface OnLongClickListener {
         public boolean onLongClick(View view, Songs item, int position);
+    }
+
+    public interface OnItemClickListener {
+        public void onClick(View view, Songs item, int position);
     }
 
     public SongAdapter(Context context, int resource, List<Songs> songs) {
@@ -32,7 +36,11 @@ public class SongAdapter extends ArrayAdapter<Songs> {
     }
 
     public void setOnLongItemClickListener(OnLongClickListener listener) {
-        this.listener = listener;
+        this.longClickListener = listener;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.itemClickListener = listener;
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -51,12 +59,13 @@ public class SongAdapter extends ArrayAdapter<Songs> {
 
         Songs song = songs.get(position);
 
-        view.setLongClickable(true);
-        view.setOnLongClickListener(view1 -> listener.onLongClick(view1, song, position));
-
         animeView.setImageResource(song.getAnimeResource());
         nameView.setText(song.getName());
         authorView.setText(song.getAuthor());
+
+        view.setLongClickable(true);
+        view.setOnLongClickListener(view1 -> longClickListener.onLongClick(view1, song, position));
+        view.setOnClickListener(v -> itemClickListener.onClick(v, song, position));
 
         return view;
     }
