@@ -56,12 +56,14 @@ public class SongAdapter extends ArrayAdapter<Songs> {
         ImageView animeView = view.findViewById(R.id.anime);
         TextView nameView = view.findViewById(R.id.name);
         TextView authorView = view.findViewById(R.id.author);
+       // TextView descriptionView = view.findViewById(R.id.descriptionN);
 
         Songs song = songs.get(position);
 
         animeView.setImageResource(song.getAnimeResource());
         nameView.setText(song.getName());
         authorView.setText(song.getAuthor());
+       // descriptionView.setText(song.getDescription());
 
         view.setLongClickable(true);
         view.setOnLongClickListener(view1 -> longClickListener.onLongClick(view1, song, position));
@@ -80,5 +82,6 @@ public class SongAdapter extends ArrayAdapter<Songs> {
     public void add(Songs obj) {
 //        super.add(obj);
         songs.add(obj);
+        notifyDataSetChanged();
     }
 }

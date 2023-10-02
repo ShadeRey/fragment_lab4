@@ -22,11 +22,12 @@ public class InfoFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static InfoFragment newInstance(String name, String author){
+    public static InfoFragment newInstance(String name, String author, String description){
         InfoFragment fragment = new InfoFragment();
         Bundle args = new Bundle();
         args.putString("SongName", name);
         args.putString("SongAuthor", author);
+        args.putString("SongDescription", description);
         fragment.setArguments(args);
         return fragment;
     }
@@ -43,10 +44,13 @@ public class InfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_info, container, false);
         String Name = getArguments().getString("SongName");
         String Author = getArguments().getString("SongAuthor");
+        String Description = getArguments().getString("SongDescription");
         TextView textViewName = view.findViewById(R.id.namE);
         TextView textViewAuthor = view.findViewById(R.id.authoR);
+        TextView textViewDescription = view.findViewById(R.id.descriptionN);
         textViewName.setText("Name: " + Name);
         textViewAuthor.setText("Author: " + Author);
+        textViewDescription.setText(Description);
         return view;
     }
 }
