@@ -81,7 +81,7 @@ public class BlankFragment extends Fragment {
             Fragment frag = InfoFragment.newInstance(this.songAdapter.getItem(position).getName(), this.songAdapter.getItem(position).getAuthor(), this.songAdapter.getItem(position).getDescription());
             requireActivity().getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.main_fragment, frag)
+                    .add(R.id.main_fragment, frag)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .addToBackStack(null)
                     .commit();
@@ -89,6 +89,7 @@ public class BlankFragment extends Fragment {
         songsList.setAdapter(songAdapter);
         //songsList.setOnItemLongClickListener();
         initButton(view);
+        initSettings(view);
     }
 
     private void initButton(View view) {
@@ -105,5 +106,18 @@ public class BlankFragment extends Fragment {
     public void deleteDialog(int position) {
         DeleteDialogFragment deleteDialogg = new DeleteDialogFragment(songAdapter, position);
         deleteDialogg.show(requireActivity().getSupportFragmentManager(), "delete");
+    }
+
+    public void initSettings(View view){
+        Button button = view.findViewById(R.id.btn_settings);
+        button.setOnClickListener(this::showSettings);
+    }
+    public void showSettings(View v){
+        SettingsFragment settingsFragment = new SettingsFragment();
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .add(R.id.main_fragment, settingsFragment, "stng")
+                .addToBackStack("ddd")
+                .commit();
     }
 }
